@@ -82,42 +82,54 @@ Import-Module psSearchGitHub
 Get-Command -Module psSearchGitHub
 
 # Get help for a specific cmdlet
-Get-Help Search-GitHub -Full
-
-# Example: Search repositories for PowerShell content
-Search-GitHub -Target Repo -SearchValue "Invoke-WebRequest"
-
-# Example: Search gists with content included
-Search-GitHub -Target Gist -SearchValue "function" -IncludeContent -Limit 50
-
-# Example: Search with summary view
-Search-GitHub -Target Repo -SearchValue "PowerShell" -Summary
+Get-Help Search-GitHubRepository -Full
+Get-Help Search-GitHubGist -Full
 ```
 
 ## 📖 Available Cmdlets
 
-### Search-GitHub
+### Search-GitHubRepository
 
-Search GitHub repositories or gists for specified content.
+Search GitHub repositories for specified content using the GitHub CLI.
 
 **Parameters:**
-- `-Target` - Specifies whether to search 'Gist' or 'Repo' (required)
-- `-SearchValue` - The text pattern to search for (required)
-- `-IncludeContent` - Include matching content in results (gist searches only)
-- `-Limit` - Maximum number of results to return (default: 100)
-- `-Summary` - Display summary view of results (repo searches)
+- `-SearchValue` - The string to search for in the repositories (required)
+- `-Owner` - The owner of the repositories to search. If not provided, searches all accessible repositories (optional)
+- `-Summary` - If specified, returns a summary of repositories containing matches instead of detailed match information (switch)
 
 **Examples:**
 
 ```powershell
-# Search gists for "Invoke-WebRequest" and include content
-Search-GitHub -Target Gist -SearchValue "Invoke-WebRequest" -IncludeContent -Limit 50
+# Search repositories owned by "skatterbrainz" for "PowerShell"
+Search-GitHubRepository -SearchValue "PowerShell" -Owner "skatterbrainz"
 
-# Search repositories for "PowerShell"
-Search-GitHub -Target Repo -SearchValue "PowerShell"
+# Search all accessible repositories for "Invoke-WebRequest"
+Search-GitHubRepository -SearchValue "Invoke-WebRequest"
 
 # Get summary of repository matches
-Search-GitHub -Target Repo -SearchValue "function" -Summary
+Search-GitHubRepository -SearchValue "function" -Summary
+```
+
+### Search-GitHubGist
+
+Search GitHub gists for specified content using the GitHub CLI.
+
+**Parameters:**
+- `-SearchValue` - The string to search for in the gists (required)
+- `-IncludeContent` - If specified, includes the matching content in the results (switch)
+- `-Limit` - The maximum number of gists to search. Default is 100 (optional)
+
+**Examples:**
+
+```powershell
+# Search gists for "PowerShell" with matching content, limited to 50 gists
+Search-GitHubGist -SearchValue "PowerShell" -IncludeContent -Limit 50
+
+# Search gists for "Invoke-WebRequest" without content
+Search-GitHubGist -SearchValue "Invoke-WebRequest"
+
+# Search for "function" with default limit of 100 gists
+Search-GitHubGist -SearchValue "function" -IncludeContent
 ```
 
 ## Contributing
@@ -152,4 +164,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### 1.0.0 - 1/2/2026
 - Initial release
-- Added: Search-GitHub cmdlet for searching repositories and gists
+- Added: Search-GitHubRepository cmdlet for searching repositories
+- Added: Search-GitHubGist cmdlet for searching gists
